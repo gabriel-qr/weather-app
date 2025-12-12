@@ -1,11 +1,10 @@
+import BasicInfoCard from '@/components/BasicInfoCard';
 import SearchInput from '@/components/searchBar';
 import { useTheme } from '@/contexts/ThemeContext';
-import { colors } from '@/lib/constants/colors';
 import { useLocationPermission } from '@/lib/hooks/useLocationPermission';
 import { useWeatherData } from '@/lib/hooks/useWeatherData';
-import Ionicons from '@expo/vector-icons/Ionicons';
 import { LinearGradient } from 'expo-linear-gradient';
-import { ActivityIndicator, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, ScrollView, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function Index() {
@@ -16,6 +15,7 @@ export default function Index() {
     onDenied: () => console.log('Permission denied'),
   });
   const { weatherData, loading } = useWeatherData();
+  // const currentTemperature = `${Number(weatherData.current.temp_c).toFixed(0)}ºC`;
 
   if (loading || !isReady) {
     return (
@@ -35,12 +35,7 @@ export default function Index() {
       <SafeAreaView style={styles.safeArea}>
         <ScrollView contentContainerStyle={styles.container}>
           <SearchInput placeholder='Search something..' />
-          <View style={[styles.locationContainer]}>
-            <Ionicons name='location-outline' size={30} color={colors.white} />
-            <Text style={[styles.locationText]}>
-              {weatherData.location.name}, {weatherData.location.region}
-            </Text>
-          </View>
+          <BasicInfoCard weatherData={weatherData} />
         </ScrollView>
       </SafeAreaView>
     </LinearGradient>
@@ -68,6 +63,13 @@ const styles = StyleSheet.create({
     padding: '5%',
   },
 
+  currentCard: {
+    justifyContent: 'center',
+    padding: 20,
+    borderRadius: 25,
+    gap: 16,
+  },
+
   locationContainer: {
     flexDirection: 'row',
     gap: 8,
@@ -75,7 +77,19 @@ const styles = StyleSheet.create({
   },
 
   locationText: {
-    fontSize: 24,
-    fontWeight: '600',
+    fontSize: 20,
+    fontWeight: '500',
+  },
+
+  temperatureText: {
+    fontSize: 40,
+    fontWeight: '700',
+    alignSelf: 'center',
+  },
+
+  temperatureSubText: {
+    fontSize: 14,
+    fontWeight: '400',
+    alignSelf: 'center',
   },
 });

@@ -1,4 +1,4 @@
-import { colors, gradients } from './colors';
+import { colors } from './colors';
 
 export type WeatherType = 'sunny' | 'rainy' | 'cloudy' | 'night';
 
@@ -10,13 +10,58 @@ export interface ColorScheme {
   text: {
     primary: string;
     secondary: string;
-    muted: string;
+    tertiary: string;
     dark: string;
+    darkSecondary: string;
   };
   card: string;
-  cardSolid: string;
-  border: string;
-  gradient: readonly [string, string];
+  cardDark: string;
+  border: {
+    light: string;
+    medium: string;
+    dark: string;
+    transparent: string;
+  };
+  input: {
+    background: string;
+    border: string;
+    placeholder: string;
+    text: string;
+  };
+  chart: {
+    line: string;
+    lineAlt: string;
+    fill: string;
+    grid: string;
+    dot: string;
+    label: string;
+    gradient: {
+      start: string;
+      end: string;
+    };
+  };
+  status: {
+    success: string;
+    error: string;
+    warning: string;
+    info: string;
+  };
+  gray: {
+    50: string;
+    100: string;
+    200: string;
+    300: string;
+    400: string;
+    500: string;
+    600: string;
+    700: string;
+    800: string;
+    900: string;
+  };
+  white: string;
+  black: string;
+  transparent: string;
+  gradient: readonly [string, string, ...string[]];
   isDark: boolean;
 }
 
@@ -29,11 +74,32 @@ export const createColorScheme = (weather: WeatherType): ColorScheme => {
     secondary: weatherColors.secondary,
     background: weatherColors.background,
     accent: weatherColors.accent,
-    text: colors.text,
+    text: isDark
+      ? {
+          primary: weatherColors.text,
+          secondary: weatherColors.textSecondary,
+          tertiary: colors.text.tertiary,
+          dark: colors.text.dark,
+          darkSecondary: colors.text.darkSecondary,
+        }
+      : {
+          primary: weatherColors.text,
+          secondary: weatherColors.textSecondary,
+          tertiary: colors.gray[600],
+          dark: colors.text.dark,
+          darkSecondary: colors.text.darkSecondary,
+        },
     card: colors.background.card,
-    cardSolid: colors.background.cardSolid,
+    cardDark: colors.background.cardDark,
     border: colors.border,
-    gradient: gradients[weather],
+    input: colors.input,
+    chart: colors.chart,
+    status: colors.status,
+    gray: colors.gray,
+    white: colors.white,
+    black: colors.black,
+    transparent: colors.transparent,
+    gradient: weatherColors.gradient as readonly [string, string, ...string[]],
     isDark,
   };
 };
