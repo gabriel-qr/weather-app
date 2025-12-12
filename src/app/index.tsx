@@ -1,17 +1,29 @@
 import SearchInput from '@/components/searchBar';
 import { useTheme } from '@/contexts/ThemeContext';
+import { colors } from '@/lib/constants/colors';
+import { useLocationPermission } from '@/lib/hooks/useLocationPermission';
+import { useWeatherData } from '@/lib/hooks/useWeatherData';
+import Ionicons from '@expo/vector-icons/Ionicons';
 import { LinearGradient } from 'expo-linear-gradient';
-import { useEffect } from 'react';
-import { ScrollView, StyleSheet, Text } from 'react-native';
+import { ActivityIndicator, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function Index() {
-  const { colorScheme, setWeatherType, weatherType } = useTheme();
+  const { colorScheme, isReady } = useTheme();
+  const { hasPermission } = useLocationPermission({
+    autoCheck: true,
+    onGranted: () => console.log('Permission granted!'),
+    onDenied: () => console.log('Permission denied'),
+  });
+  const { weatherData, loading } = useWeatherData();
 
-  useEffect(() => {
-    setWeatherType('rainy');
-    // colorScheme.isDark;
-  }, []);
+  if (loading || !isReady) {
+    return (
+      <View style={[styles.loadingState, { backgroundColor: '#1a1a1a' }]}>
+        <ActivityIndicator size={'large'} color='#ffffff' />
+      </View>
+    );
+  }
 
   return (
     <LinearGradient
@@ -22,8 +34,13 @@ export default function Index() {
     >
       <SafeAreaView style={styles.safeArea}>
         <ScrollView contentContainerStyle={styles.container}>
-          <Text style={{ color: colorScheme.text.primary }}>WELCOME</Text>
           <SearchInput placeholder='Search something..' />
+          <View style={[styles.locationContainer]}>
+            <Ionicons name='location-outline' size={30} color={colors.white} />
+            <Text style={[styles.locationText]}>
+              {weatherData.location.name}, {weatherData.location.region}
+            </Text>
+          </View>
         </ScrollView>
       </SafeAreaView>
     </LinearGradient>
@@ -49,5 +66,16 @@ const styles = StyleSheet.create({
     flex: 1,
     gap: 25,
     padding: '5%',
+  },
+
+  locationContainer: {
+    flexDirection: 'row',
+    gap: 8,
+    alignItems: 'center',
+  },
+
+  locationText: {
+    fontSize: 24,
+    fontWeight: '600',
   },
 });

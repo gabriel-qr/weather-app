@@ -3,8 +3,8 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { StyleSheet, TextInput, TextInputProps, View } from 'react-native';
 
 interface SearchInputProps extends TextInputProps {
-  //   value: string;
-  //   onChangeText: (text: string) => void;
+  value?: string;
+  onChangeText?: (text: string) => void;
 }
 
 const SearchInput: React.FC<SearchInputProps> = ({ ...props }) => {
@@ -13,8 +13,8 @@ const SearchInput: React.FC<SearchInputProps> = ({ ...props }) => {
   return (
     <View style={[styles.container, { backgroundColor: colorScheme.card }]}>
       <TextInput
-        placeholderTextColor={colorScheme.text.muted}
-        style={[styles.searchInput, { color: '#fff' }]}
+        placeholderTextColor={colorScheme.text.secondary}
+        style={[styles.searchInput, { color: colorScheme.text.primary }]}
         cursorColor={colorScheme.accent}
         {...props}
       />
@@ -22,7 +22,7 @@ const SearchInput: React.FC<SearchInputProps> = ({ ...props }) => {
       <Ionicons
         name='search-outline'
         size={18}
-        color={colorScheme.text.muted}
+        color={colorScheme.text.secondary}
         style={styles.icon}
       />
     </View>

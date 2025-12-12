@@ -3,18 +3,33 @@ import React, { createContext, ReactNode, useContext, useState } from 'react';
 
 interface ThemeContextType {
   colorScheme: ColorScheme;
-  weatherType: WeatherType;
+  weatherType: WeatherType | null;
   setWeatherType: (weather: WeatherType) => void;
+  isReady: boolean;
 }
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [weatherType, setWeatherType] = useState<WeatherType>('sunny');
-  const colorScheme = createColorScheme(weatherType);
+  const [weatherType, setWeatherType] = useState<WeatherType | null>(null);
+  const [isReady, setIsReady] = useState(false);
+
+  const colorScheme = createColorScheme(weatherType || 'cloudy');
+
+  const handleSetWeatherType = (weather: WeatherType) => {
+    setWeatherType(weather);
+    setIsReady(true);
+  };
 
   return (
-    <ThemeContext.Provider value={{ colorScheme, weatherType, setWeatherType }}>
+    <ThemeContext.Provider
+      value={{
+        colorScheme,
+        weatherType,
+        setWeatherType: handleSetWeatherType,
+        isReady,
+      }}
+    >
       {children}
     </ThemeContext.Provider>
   );
