@@ -18,8 +18,11 @@ const BasicInfoCard: React.FC<BasicInfoCardProps> = ({
   activeUnit,
 }) => {
   const { colorScheme } = useTheme();
-  const Date = getFormattedDate().date;
-  const dayOfTheWeek = getFormattedDate().dayOfTheWeekCapitalized;
+  const Date = getFormattedDate(locationWeatherData.localtime, locationWeatherData.tz_id).date;
+  const dayOfTheWeek = getFormattedDate(
+    locationWeatherData.localtime,
+    locationWeatherData.tz_id
+  ).dayOfTheWeekCapitalized;
 
   const currentTemp =
     activeUnit === 'C'

@@ -27,12 +27,20 @@ export default function Index() {
 
   const [activeUnit, setActiveUnit] = useState<'C' | 'F'>('C');
 
+  const dateNow = locationWeatherData.localtime?.split(' ')[0];
+  const hourNow = locationWeatherData.localtime?.split(' ')[1].slice(0, 2);
+
   const hourlyInfo = hourlyWeatherData.map((item: any) => ({
-    hour: item.time.slice(-5, -3),
+    date: item.time.split(' ')[0],
+    hour: item.time.split(' ')[1].slice(0, 2),
     temp_c: item.temp_c,
     temp_f: item.temp_f,
     icon: item.condition.icon,
   }));
+
+  const filteredHourlyInfo = hourlyInfo
+    .filter((item: any) => (item.date === dateNow && item.hour > hourNow) || item.date !== dateNow)
+    .slice(0, 24);
 
   const handleUnitChange = (unit: 'C' | 'F') => {
     setActiveUnit(unit);
@@ -70,7 +78,7 @@ export default function Index() {
             <Text style={[styles.text, { color: colorScheme.text.primary }]}>Hourly Forecast</Text>
             <FlatList
               contentContainerStyle={styles.flatlist}
-              data={hourlyInfo}
+              data={filteredHourlyInfo}
               keyExtractor={(item, index) => index.toString()}
               horizontal={true}
               showsHorizontalScrollIndicator={false}
@@ -125,6 +133,6 @@ const styles = StyleSheet.create({
 
   flatlist: {
     paddingHorizontal: 2,
-    gap: 8,
+    gap: 16,
   },
 });

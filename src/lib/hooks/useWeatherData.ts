@@ -25,16 +25,21 @@ export function useWeatherData() {
         return;
       }
 
-      const result = await getForecatsWeather(`${location.lat},${location.lng}`, 1, false);
+      const result = await getForecatsWeather(`${location.lat},${location.lng}`, 2, false);
 
       const weatherConditionCode = result.current.condition.code;
       const isDay = result.current.condition.is_day;
+
+      const hourlyWeatherDataTotal = [
+        ...result.forecast.forecastday[0].hour,
+        ...result.forecast.forecastday[1].hour,
+      ];
 
       setWeatherType(getThemeFromWeatherCode(weatherConditionCode, isDay));
       setLocationWeatherData(result.location);
       setCurrentWeatherData(result.current);
       setForecastWeatherData(result.forecast);
-      setHourlyWeatherData(result.forecast.forecastday[0].hour);
+      setHourlyWeatherData(hourlyWeatherDataTotal);
 
       console.log('Weather Condition:', getThemeFromWeatherCode(weatherConditionCode, isDay));
     } catch (error) {

@@ -4,6 +4,7 @@ import { Image, StyleSheet, Text, View } from 'react-native';
 
 interface HourInfoCardProps {
   hourlyInfo: {
+    date: string;
     hour: string;
     temp_c: number;
     temp_f: number;
