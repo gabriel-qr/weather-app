@@ -50,6 +50,7 @@ export default function Index() {
             locationWeatherData={locationWeatherData}
             currentWeatherData={currentWeatherData}
             forecastWeatherData={forecastWeatherData}
+            activeUnit={activeUnit}
           />
         </ScrollView>
       </SafeAreaView>

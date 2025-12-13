@@ -8,25 +8,41 @@ interface BasicInfoCardProps {
   locationWeatherData: any;
   currentWeatherData: any;
   forecastWeatherData: any;
+  activeUnit: 'C' | 'F';
 }
 
 const BasicInfoCard: React.FC<BasicInfoCardProps> = ({
   locationWeatherData,
   currentWeatherData,
   forecastWeatherData,
+  activeUnit,
 }) => {
   const { colorScheme } = useTheme();
   const Date = getFormattedDate().date;
   const dayOfTheWeek = getFormattedDate().dayOfTheWeekCapitalized;
 
-  const tempCelsius = (temp: string) => {
+  const tempFormatted = (temp: string) => {
     return Number(temp).toFixed(0);
   };
 
-  const currentTemp = tempCelsius(currentWeatherData.temp_c);
-  const fellsLike = tempCelsius(currentWeatherData.feelslike_c);
-  const maxTemp = tempCelsius(forecastWeatherData.forecastday[0].day.maxtemp_c);
-  const minTemp = tempCelsius(forecastWeatherData.forecastday[0].day.mintemp_c);
+  const currentTemp =
+    activeUnit === 'C'
+      ? tempFormatted(currentWeatherData.temp_c)
+      : tempFormatted(currentWeatherData.temp_f);
+
+  const fellsLike = tempFormatted(
+    activeUnit === 'C' ? currentWeatherData.feelslike_c : currentWeatherData.feelslike_f
+  );
+  const maxTemp = tempFormatted(
+    activeUnit === 'C'
+      ? forecastWeatherData.forecastday[0].day.maxtemp_c
+      : forecastWeatherData.forecastday[0].day.maxtemp_f
+  );
+  const minTemp = tempFormatted(
+    activeUnit === 'C'
+      ? forecastWeatherData.forecastday[0].day.mintemp_c
+      : forecastWeatherData.forecastday[0].day.mintemp_f
+  );
 
   return (
     <View style={[styles.container, { backgroundColor: colorScheme.card }]}>
@@ -44,7 +60,7 @@ const BasicInfoCard: React.FC<BasicInfoCardProps> = ({
 
       <View>
         <Text style={[styles.temperatureText, { color: colorScheme.text.primary }]}>
-          {`${currentTemp}ºC`}
+          {`${currentTemp}º${activeUnit}`}
         </Text>
         <Text style={[styles.temperatureSubText, { color: colorScheme.text.primary }]}>
           {currentWeatherData.condition.text}
@@ -54,7 +70,7 @@ const BasicInfoCard: React.FC<BasicInfoCardProps> = ({
             <Text style={[styles.secondaryText, { color: colorScheme.text.tertiary }]}>
               Max:{' '}
               <Text style={[styles.temperatureSecondary, { color: colorScheme.text.primary }]}>
-                {maxTemp}ºC
+                {`${maxTemp}º${activeUnit}`}
               </Text>
             </Text>
 
@@ -63,7 +79,7 @@ const BasicInfoCard: React.FC<BasicInfoCardProps> = ({
             <Text style={[styles.secondaryText, { color: colorScheme.text.tertiary }]}>
               Min:{' '}
               <Text style={[styles.temperatureSecondary, { color: colorScheme.text.primary }]}>
-                {minTemp}ºC
+                {`${minTemp}º${activeUnit}`}
               </Text>
             </Text>
           </View>
