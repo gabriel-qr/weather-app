@@ -1,9 +1,11 @@
 import BasicInfoCard from '@/components/BasicInfoCard';
 import SearchInput from '@/components/searchBar';
+import TemperatureToggle from '@/components/TemperatureToggle';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useLocationPermission } from '@/lib/hooks/useLocationPermission';
 import { useWeatherData } from '@/lib/hooks/useWeatherData';
 import { LinearGradient } from 'expo-linear-gradient';
+import { useState } from 'react';
 import { ActivityIndicator, ScrollView, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -14,8 +16,14 @@ export default function Index() {
     onGranted: () => console.log('Permission granted!'),
     onDenied: () => console.log('Permission denied'),
   });
-  const { weatherData, loading } = useWeatherData();
-  // const currentTemperature = `${Number(weatherData.current.temp_c).toFixed(0)}ºC`;
+  const { locationWeatherData, currentWeatherData, forecastWeatherData, loading } =
+    useWeatherData();
+
+  const [activeUnit, setActiveUnit] = useState<'C' | 'F'>('C');
+
+  const handleUnitChange = (unit: 'C' | 'F') => {
+    setActiveUnit(unit);
+  };
 
   if (loading || !isReady) {
     return (
@@ -34,8 +42,15 @@ export default function Index() {
     >
       <SafeAreaView style={styles.safeArea}>
         <ScrollView contentContainerStyle={styles.container}>
-          <SearchInput placeholder='Search something..' />
-          <BasicInfoCard weatherData={weatherData} />
+          <View style={{ flexDirection: 'row', gap: 8, alignItems: 'center' }}>
+            <SearchInput placeholder='Search something..' />
+            <TemperatureToggle activeUnit={activeUnit} onChange={handleUnitChange} />
+          </View>
+          <BasicInfoCard
+            locationWeatherData={locationWeatherData}
+            currentWeatherData={currentWeatherData}
+            forecastWeatherData={forecastWeatherData}
+          />
         </ScrollView>
       </SafeAreaView>
     </LinearGradient>

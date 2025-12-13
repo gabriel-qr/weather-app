@@ -5,7 +5,9 @@ import { getThemeFromWeatherCode } from '../utils/weatherMapper';
 import { useLocation } from './useLocation';
 
 export function useWeatherData() {
-  const [weatherData, setWeatherData] = useState<any>([]);
+  const [currentWeatherData, setCurrentWeatherData] = useState<any>([]);
+  const [forecastWeatherData, setForecastWeatherData] = useState<any>([]);
+  const [locationWeatherData, setLocationWeatherData] = useState<any>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -28,9 +30,11 @@ export function useWeatherData() {
       const isDay = result.current.condition.is_day;
 
       setWeatherType(getThemeFromWeatherCode(weatherConditionCode, isDay));
-      setWeatherData(result);
+      setLocationWeatherData(result.location);
+      setCurrentWeatherData(result.current);
+      setForecastWeatherData(result.forecast);
 
-      console.log('Weather Data:', result);
+      // console.log('Weather Data:', result);
       console.log('Weather Condition:', getThemeFromWeatherCode(weatherConditionCode, isDay));
     } catch (error) {
       console.error('Error fetching weather:', error);
@@ -44,5 +48,5 @@ export function useWeatherData() {
     fetchWeatherData();
   }, []);
 
-  return { weatherData, loading, error };
+  return { locationWeatherData, currentWeatherData, forecastWeatherData, loading, error };
 }

@@ -31,6 +31,7 @@ const SearchInput: React.FC<SearchInputProps> = ({ ...props }) => {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     borderRadius: 20,
