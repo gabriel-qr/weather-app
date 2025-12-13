@@ -1,5 +1,5 @@
 import { useTheme } from '@/contexts/ThemeContext';
-import { getFormattedDate } from '@/lib/utils/timeUtils';
+import { getFormattedDate, tempFormatted } from '@/lib/utils/utils';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { StyleSheet, Text, View } from 'react-native';
@@ -21,10 +21,6 @@ const BasicInfoCard: React.FC<BasicInfoCardProps> = ({
   const Date = getFormattedDate().date;
   const dayOfTheWeek = getFormattedDate().dayOfTheWeekCapitalized;
 
-  const tempFormatted = (temp: string) => {
-    return Number(temp).toFixed(0);
-  };
-
   const currentTemp =
     activeUnit === 'C'
       ? tempFormatted(currentWeatherData.temp_c)
@@ -33,11 +29,13 @@ const BasicInfoCard: React.FC<BasicInfoCardProps> = ({
   const fellsLike = tempFormatted(
     activeUnit === 'C' ? currentWeatherData.feelslike_c : currentWeatherData.feelslike_f
   );
+
   const maxTemp = tempFormatted(
     activeUnit === 'C'
       ? forecastWeatherData.forecastday[0].day.maxtemp_c
       : forecastWeatherData.forecastday[0].day.maxtemp_f
   );
+
   const minTemp = tempFormatted(
     activeUnit === 'C'
       ? forecastWeatherData.forecastday[0].day.mintemp_c
@@ -60,26 +58,26 @@ const BasicInfoCard: React.FC<BasicInfoCardProps> = ({
 
       <View>
         <Text style={[styles.temperatureText, { color: colorScheme.text.primary }]}>
-          {`${currentTemp}º${activeUnit}`}
+          {`${currentTemp}º`}
         </Text>
         <Text style={[styles.temperatureSubText, { color: colorScheme.text.primary }]}>
           {currentWeatherData.condition.text}
         </Text>
         <View>
           <View style={[styles.horizontalContainer, { marginTop: 8 }]}>
-            <Text style={[styles.secondaryText, { color: colorScheme.text.tertiary }]}>
+            <Text style={[styles.secondaryText, { color: colorScheme.text.secondary }]}>
               Max:{' '}
               <Text style={[styles.temperatureSecondary, { color: colorScheme.text.primary }]}>
-                {`${maxTemp}º${activeUnit}`}
+                {`${maxTemp}º`}
               </Text>
             </Text>
 
             <View style={[styles.divider, { backgroundColor: colorScheme.gray[400] }]} />
 
-            <Text style={[styles.secondaryText, { color: colorScheme.text.tertiary }]}>
+            <Text style={[styles.secondaryText, { color: colorScheme.text.secondary }]}>
               Min:{' '}
               <Text style={[styles.temperatureSecondary, { color: colorScheme.text.primary }]}>
-                {`${minTemp}º${activeUnit}`}
+                {`${minTemp}º`}
               </Text>
             </Text>
           </View>
@@ -88,12 +86,15 @@ const BasicInfoCard: React.FC<BasicInfoCardProps> = ({
 
       <View style={styles.horizontalContainer}>
         <View style={{ alignItems: 'center' }}>
-          <Text style={[styles.secondaryText, { color: colorScheme.text.tertiary }]}>
+          <Text style={[styles.secondaryText, { color: colorScheme.text.secondary }]}>
             FEELS LIKE
           </Text>
           <Text
-            style={[styles.secondaryText, { color: colorScheme.text.primary, fontWeight: '700' }]}
-          >{`${fellsLike}ºC`}</Text>
+            style={[
+              styles.secondaryText,
+              { color: colorScheme.text.primary, fontWeight: '700', fontSize: 18 },
+            ]}
+          >{`${fellsLike}º`}</Text>
         </View>
 
         <View style={[styles.divider, { backgroundColor: colorScheme.gray[400] }]} />
@@ -103,16 +104,16 @@ const BasicInfoCard: React.FC<BasicInfoCardProps> = ({
             <MaterialCommunityIcons
               name='water-percent'
               size={15}
-              color={colorScheme.text.tertiary}
+              color={colorScheme.text.secondary}
             />
-            <Text style={[styles.secondaryText, { color: colorScheme.text.tertiary }]}>
+            <Text style={[styles.secondaryText, { color: colorScheme.text.secondary }]}>
               HUMIDITY
             </Text>
           </View>
           <Text
             style={[
               styles.temperatureSubText,
-              { color: colorScheme.text.primary, fontWeight: '700' },
+              { color: colorScheme.text.primary, fontWeight: '700', fontSize: 18 },
             ]}
           >{`${currentWeatherData.humidity}%`}</Text>
         </View>
@@ -124,7 +125,7 @@ const BasicInfoCard: React.FC<BasicInfoCardProps> = ({
 const styles = StyleSheet.create({
   container: {
     justifyContent: 'center',
-    paddingHorizontal: 18,
+    paddingHorizontal: 20,
     paddingVertical: 30,
     borderRadius: 30,
     gap: 25,
@@ -178,9 +179,9 @@ const styles = StyleSheet.create({
   divider: {
     width: 2,
     minHeight: 15,
-    maxHeight: '70%',
+    height: '70%',
     alignItems: 'center',
-    opacity: 0.3,
+    opacity: 0.5,
   },
 
   temperatureSecondary: {

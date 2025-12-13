@@ -15,3 +15,7 @@ export const getFormattedDate = () => {
 
   return { date, dayOfTheWeekCapitalized };
 };
+
+export const tempFormatted = (temp: string | number) => {
+  return Number(temp).toFixed(0);
+};

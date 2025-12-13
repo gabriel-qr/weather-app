@@ -63,7 +63,7 @@ const TemperatureToggle = ({ activeUnit, onChange }: TemperatureToggleProps) => 
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    borderRadius: 20,
+    borderRadius: 16,
     padding: 5,
   },
   button: {

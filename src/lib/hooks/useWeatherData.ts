@@ -8,6 +8,7 @@ export function useWeatherData() {
   const [currentWeatherData, setCurrentWeatherData] = useState<any>([]);
   const [forecastWeatherData, setForecastWeatherData] = useState<any>([]);
   const [locationWeatherData, setLocationWeatherData] = useState<any>([]);
+  const [hourlyWeatherData, setHourlyWeatherData] = useState<any>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -33,8 +34,8 @@ export function useWeatherData() {
       setLocationWeatherData(result.location);
       setCurrentWeatherData(result.current);
       setForecastWeatherData(result.forecast);
+      setHourlyWeatherData(result.forecast.forecastday[0].hour);
 
-      // console.log('Weather Data:', result);
       console.log('Weather Condition:', getThemeFromWeatherCode(weatherConditionCode, isDay));
     } catch (error) {
       console.error('Error fetching weather:', error);
@@ -48,5 +49,13 @@ export function useWeatherData() {
     fetchWeatherData();
   }, []);
 
-  return { locationWeatherData, currentWeatherData, forecastWeatherData, loading, error };
+  return {
+    locationWeatherData,
+    currentWeatherData,
+    forecastWeatherData,
+    hourlyWeatherData,
+    loading,
+    error,
+    refetch: fetchWeatherData,
+  };
 }
