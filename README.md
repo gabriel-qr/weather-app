@@ -14,7 +14,7 @@ A modern mobile weather application built with React Native and Expo, featuring 
 
 - **Location-Aware:** Automatically detects your current location on startup to deliver immediate, relevant weather data (with permission).
 
-- **Localized Experience:** Dates and times are automatically formatted according to your device's language and regional settings for a native feel.
+- **Localized Experience:** Dates are automatically formatted according to your device's language and regional settings for a native feel.
 
 - **Real-Time Data:** Integrates with WeatherAPI to provide accurate, up-to-date weather information and forecasts.
 
