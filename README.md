@@ -14,7 +14,7 @@ A modern mobile weather application built with React Native and Expo, featuring 
 
 - **Location-Aware:** Automatically detects your current location on startup to deliver immediate, relevant weather data (with permission).
 
-- **Localized Experience:** Dates are automatically formatted according to your device's language and regional settings for a native feel.
+- **Localized Experience:** Dates and times are automatically formatted according to your device's language and regional settings for a native feel.
 
 - **Real-Time Data:** Integrates with WeatherAPI to provide accurate, up-to-date weather information and forecasts.
 
@@ -27,6 +27,18 @@ A modern mobile weather application built with React Native and Expo, featuring 
 - **Expo Location** - Geolocation services for automatic weather updates
 - **Expo Localization** - Device language and region detection for proper date/time formatting
 - **WeatherAPI** - Reliable weather data provider
+
+## Project Structure
+
+```
+src/
+├── app/              # App entry point and screens
+├── components/       # Reusable UI components
+├── contexts/         # React Context providers
+├── hooks/            # Custom hooks
+├── services/         # API integration
+└── utils/            # Helper functions
+```
 
 ## Setup
 
@@ -65,10 +77,6 @@ Use the Expo Go app on your device to scan the QR code, or run on an emulator wi
    yarn android  # for Android
    yarn ios      # for iOS
 ```
-
-## Project Structure
-
-The app showcases best practices in mobile development, including modular component architecture, efficient API data handling, and responsive design principles that work across different screen sizes and platforms.
 
 ## License
 
