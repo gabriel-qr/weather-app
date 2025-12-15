@@ -1,9 +1,9 @@
-import { getCalendars } from 'expo-localization';
+import { getCalendars, getLocales } from 'expo-localization';
 
 export const getFormattedDate = (localtime: string, timeZone?: string) => {
   const now = new Date(localtime.replace(' ', 'T'));
   const userTimeZone = timeZone ? timeZone : getCalendars()[0].timeZone;
-  const userLocale = 'en-US';
+  const userLocale = getLocales()[0].languageTag;
 
   const date = new Intl.DateTimeFormat(userLocale, {
     dateStyle: 'medium',
