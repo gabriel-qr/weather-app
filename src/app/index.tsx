@@ -23,9 +23,11 @@ export default function Index() {
     forecastWeatherData,
     hourlyWeatherData,
     loading,
+    locationId,
   } = useWeatherData();
 
   const [activeUnit, setActiveUnit] = useState<'C' | 'F'>('C');
+  const [searchText, setSearchText] = useState('');
 
   const dateNow = locationWeatherData.localtime?.split(' ')[0];
   const hourNow = locationWeatherData.localtime?.split(' ')[1].slice(0, 2);
@@ -46,6 +48,22 @@ export default function Index() {
     setActiveUnit(unit);
   };
 
+  // const handleSearch = async (value: string) => {
+  //   if (value !== '') {
+  //     try {
+  //       const result = await searchLocation(value);
+  //       console.log('resultado: ', result);
+
+  //       await fetchWeatherByCoordinates(result.lat, result.lon);
+  //     } catch (error) {
+  //       console.error('Erro na busca:', error);
+  //     }
+  //   }
+  // };
+  // useEffect(() => {
+  //   handleSearch(searchText);
+  // }, [setSearchText]);
+
   if (loading || !isReady) {
     return (
       <View style={[styles.loadingState, { backgroundColor: '#1a1a1a' }]}>
@@ -64,7 +82,13 @@ export default function Index() {
       <SafeAreaView style={styles.safeArea}>
         <ScrollView contentContainerStyle={styles.container}>
           <View style={styles.header}>
-            <SearchInput placeholder='Search something..' />
+            <SearchInput
+              placeholder='Search by city...'
+              value={searchText}
+              onChangeText={setSearchText}
+              // onSubmitEditing={() => handleSearch(searchText)}
+              returnKeyType='search'
+            />
             <TemperatureToggle activeUnit={activeUnit} onChange={handleUnitChange} />
           </View>
           <BasicInfoCard
@@ -72,6 +96,7 @@ export default function Index() {
             currentWeatherData={currentWeatherData}
             forecastWeatherData={forecastWeatherData}
             activeUnit={activeUnit}
+            locationId={locationId}
           />
 
           <View style={[styles.flatListContainer, { backgroundColor: colorScheme.card }]}>

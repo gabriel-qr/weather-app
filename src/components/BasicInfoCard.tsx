@@ -9,6 +9,13 @@ interface BasicInfoCardProps {
   currentWeatherData: any;
   forecastWeatherData: any;
   activeUnit: 'C' | 'F';
+  locationId: LocationIdProps;
+}
+
+interface LocationIdProps {
+  city: string;
+  state: string;
+  countryCode: string;
 }
 
 const BasicInfoCard: React.FC<BasicInfoCardProps> = ({
@@ -16,6 +23,7 @@ const BasicInfoCard: React.FC<BasicInfoCardProps> = ({
   currentWeatherData,
   forecastWeatherData,
   activeUnit,
+  locationId,
 }) => {
   const { colorScheme } = useTheme();
   const Date = getFormattedDate(locationWeatherData.localtime, locationWeatherData.tz_id).date;
@@ -51,7 +59,7 @@ const BasicInfoCard: React.FC<BasicInfoCardProps> = ({
         <View style={[styles.locationContainer]}>
           <Ionicons name='location-outline' size={25} color={colorScheme.text.primary} />
           <Text style={[styles.locationText, { color: colorScheme.text.primary }]}>
-            {locationWeatherData.name}, {locationWeatherData.region}
+            {locationId.city}, {locationId.state} - {locationId.countryCode}
           </Text>
         </View>
         <Text
