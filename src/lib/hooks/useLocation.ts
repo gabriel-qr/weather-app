@@ -1,4 +1,4 @@
-import { getCurrentPositionAsync } from 'expo-location';
+import { getCurrentPositionAsync, reverseGeocodeAsync } from 'expo-location';
 import { useState } from 'react';
 
 export function useLocation() {
@@ -22,5 +22,24 @@ export function useLocation() {
     }
   };
 
-  return { getCurrentPosition, loading };
+  const getCityFromCoords = async (lat: number, lng: number) => {
+    try {
+      setLoading(true);
+
+      const result = await reverseGeocodeAsync({
+        latitude: lat,
+        longitude: lng,
+      });
+
+      return result[0];
+    } catch (error) {
+      console.error('Error getting location: ', error);
+
+      return null;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return { getCurrentPosition, getCityFromCoords, loading };
 }
