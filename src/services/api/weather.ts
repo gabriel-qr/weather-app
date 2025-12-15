@@ -1,7 +1,7 @@
 const baseURL = 'https://api.weatherapi.com/v1';
 const API_KEY = process.env.EXPO_PUBLIC_API_KEY;
 
-export async function getForecatsWeather(location: string, days: number, showAlerts: boolean) {
+export async function getForecastWeather(location: string, days: number, showAlerts: boolean) {
   const alerts = showAlerts ? 'yes' : 'no';
 
   try {

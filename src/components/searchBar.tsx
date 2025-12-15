@@ -7,15 +7,17 @@ interface SearchInputProps extends TextInputProps {
   onChangeText?: (text: string) => void;
 }
 
-const SearchInput: React.FC<SearchInputProps> = ({ ...props }) => {
+const SearchInput: React.FC<SearchInputProps> = ({ value, onChangeText, ...props }) => {
   const { colorScheme, setWeatherType } = useTheme();
 
   return (
     <View style={[styles.container, { backgroundColor: colorScheme.card }]}>
       <TextInput
+        value={value}
         placeholderTextColor={colorScheme.text.secondary}
         style={[styles.searchInput, { color: colorScheme.text.primary }]}
-        cursorColor={colorScheme.accent}
+        cursorColor={colorScheme.gray[700]}
+        onChangeText={onChangeText}
         {...props}
       />
 

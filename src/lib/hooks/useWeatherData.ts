@@ -1,5 +1,5 @@
 import { useTheme } from '@/contexts/ThemeContext';
-import { getForecatsWeather } from '@/services/api/weather';
+import { getForecastWeather } from '@/services/api/weather';
 import { useEffect, useState } from 'react';
 import { getThemeFromWeatherCode } from '../utils/weatherMapper';
 import { useLocation } from './useLocation';
@@ -26,9 +26,8 @@ export function useWeatherData() {
         setLoading(false);
         return;
       }
-      console.log(location);
 
-      const result = await getForecatsWeather(`${location.subregion}`, 2, false);
+      const result = await getForecastWeather(`${location.subregion}`, 2, false);
 
       const weatherConditionCode = result.current.condition.code;
       const isDay = result.current.condition.is_day;
@@ -60,6 +59,45 @@ export function useWeatherData() {
     }
   };
 
+  const fetchSearchData = async (value: string) => {
+    if (value !== '') {
+      try {
+        console.log('searching for: ', value);
+        const result = await getForecastWeather(value, 2, false);
+        console.log('Response: ', result.location);
+
+        const weatherConditionCode = result.current.condition.code;
+        const isDay = result.current.condition.is_day;
+
+        const hourlyWeatherDataTotal = [
+          ...result.forecast.forecastday[0].hour,
+          ...result.forecast.forecastday[1].hour,
+        ];
+
+        const location = await getCityFromCoords(result.location.lat, result.location.lon);
+        console.log(location);
+
+        const geoInfo = {
+          city: location?.subregion,
+          state: location?.region,
+          countryCode: location?.isoCountryCode,
+        };
+
+        setWeatherType(getThemeFromWeatherCode(weatherConditionCode, isDay));
+        setLocationWeatherData(result.location);
+        setCurrentWeatherData(result.current);
+        setForecastWeatherData(result.forecast);
+        setHourlyWeatherData(hourlyWeatherDataTotal);
+        setLocationId(geoInfo);
+
+        console.log('Weather Condition:', getThemeFromWeatherCode(weatherConditionCode, isDay));
+      } catch (error) {
+        console.error('Error fetching weather:', error);
+        setError('Failed to fetch weather data');
+      }
+    }
+  };
+
   useEffect(() => {
     fetchWeatherData();
   }, [location]);
@@ -72,6 +110,7 @@ export function useWeatherData() {
     locationId,
     loading,
     error,
+    fetchSearchData,
     refetch: fetchWeatherData,
   };
 }

@@ -5,6 +5,7 @@ import TemperatureToggle from '@/components/TemperatureToggle';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useLocationPermission } from '@/lib/hooks/useLocationPermission';
 import { useWeatherData } from '@/lib/hooks/useWeatherData';
+import { hour12Formatted, hour24Formatted } from '@/lib/utils/utils';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useState } from 'react';
 import { ActivityIndicator, FlatList, ScrollView, StyleSheet, Text, View } from 'react-native';
@@ -24,6 +25,7 @@ export default function Index() {
     hourlyWeatherData,
     loading,
     locationId,
+    fetchSearchData,
   } = useWeatherData();
 
   const [activeUnit, setActiveUnit] = useState<'C' | 'F'>('C');
@@ -34,35 +36,33 @@ export default function Index() {
 
   const hourlyInfo = hourlyWeatherData.map((item: any) => ({
     date: item.time.split(' ')[0],
-    hour: item.time.split(' ')[1].slice(0, 2),
+    hour_24: hour24Formatted(item.time),
+    hour_12: hour12Formatted(item.time),
     temp_c: item.temp_c,
     temp_f: item.temp_f,
     icon: item.condition.icon,
   }));
 
   const filteredHourlyInfo = hourlyInfo
-    .filter((item: any) => (item.date === dateNow && item.hour > hourNow) || item.date !== dateNow)
+    .filter(
+      (item: any) => (item.date === dateNow && item.hour_24 > hourNow) || item.date !== dateNow
+    )
     .slice(0, 24);
 
   const handleUnitChange = (unit: 'C' | 'F') => {
     setActiveUnit(unit);
   };
 
-  // const handleSearch = async (value: string) => {
-  //   if (value !== '') {
-  //     try {
-  //       const result = await searchLocation(value);
-  //       console.log('resultado: ', result);
-
-  //       await fetchWeatherByCoordinates(result.lat, result.lon);
-  //     } catch (error) {
-  //       console.error('Erro na busca:', error);
-  //     }
-  //   }
-  // };
-  // useEffect(() => {
-  //   handleSearch(searchText);
-  // }, [setSearchText]);
+  const handleSearch = async (value: string) => {
+    if (value !== '') {
+      try {
+        await fetchSearchData(value);
+        setSearchText('');
+      } catch (error) {
+        console.error('Erro na busca:', error);
+      }
+    }
+  };
 
   if (loading || !isReady) {
     return (
@@ -86,7 +86,7 @@ export default function Index() {
               placeholder='Search by city...'
               value={searchText}
               onChangeText={setSearchText}
-              // onSubmitEditing={() => handleSearch(searchText)}
+              onSubmitEditing={() => handleSearch(searchText)}
               returnKeyType='search'
             />
             <TemperatureToggle activeUnit={activeUnit} onChange={handleUnitChange} />

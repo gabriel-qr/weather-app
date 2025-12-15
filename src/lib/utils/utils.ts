@@ -16,6 +16,20 @@ export const getFormattedDate = (localtime: string, timeZone?: string) => {
   return { date, dayOfTheWeekCapitalized };
 };
 
-export const tempFormatted = (temp: string | number) => {
-  return Number(temp).toFixed(0);
+export const tempFormatted = (temp: number) => {
+  return Math.round(temp);
+};
+
+export const hour24Formatted = (time: string) => {
+  return new Date(time).toLocaleTimeString('en-US', {
+    hour: 'numeric',
+    hour12: false,
+  });
+};
+
+export const hour12Formatted = (time: string) => {
+  return new Date(time).toLocaleTimeString('en-US', {
+    hour: 'numeric',
+    hour12: true,
+  });
 };

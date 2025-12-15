@@ -17,7 +17,7 @@ const TemperatureToggle = ({ activeUnit, onChange }: TemperatureToggleProps) => 
         style={[
           styles.button,
           activeUnit === 'C'
-            ? { backgroundColor: colorScheme.white }
+            ? { backgroundColor: colorScheme.accent }
             : { backgroundColor: colorScheme.transparent },
         ]}
         activeOpacity={0.8}
@@ -27,7 +27,7 @@ const TemperatureToggle = ({ activeUnit, onChange }: TemperatureToggleProps) => 
           style={[
             styles.text,
             activeUnit === 'C'
-              ? { color: colorScheme.gray[900], fontWeight: '700' }
+              ? { color: colorScheme.white, fontWeight: '700' }
               : { color: colorScheme.gray[600] },
           ]}
         >
@@ -39,7 +39,7 @@ const TemperatureToggle = ({ activeUnit, onChange }: TemperatureToggleProps) => 
         style={[
           styles.button,
           activeUnit === 'F'
-            ? { backgroundColor: colorScheme.white }
+            ? { backgroundColor: colorScheme.accent }
             : { backgroundColor: colorScheme.transparent },
         ]}
         activeOpacity={0.8}
@@ -49,7 +49,7 @@ const TemperatureToggle = ({ activeUnit, onChange }: TemperatureToggleProps) => 
           style={[
             styles.text,
             activeUnit === 'F'
-              ? { color: colorScheme.gray[900], fontWeight: '700' }
+              ? { color: colorScheme.white, fontWeight: '700' }
               : { color: colorScheme.gray[600] },
           ]}
         >
@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontWeight: '500',
-    fontSize: 14,
+    fontSize: 15,
   },
 });
 

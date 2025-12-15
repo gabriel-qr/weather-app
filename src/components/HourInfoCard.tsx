@@ -5,7 +5,8 @@ import { Image, StyleSheet, Text, View } from 'react-native';
 interface HourInfoCardProps {
   hourlyInfo: {
     date: string;
-    hour: string;
+    hour_12: string;
+    hour_24: string;
     temp_c: number;
     temp_f: number;
     icon: string;
@@ -18,7 +19,9 @@ const HourInfoCard: React.FC<HourInfoCardProps> = ({ hourlyInfo, activeUnit }) =
 
   return (
     <View style={styles.container}>
-      <Text style={[styles.hourText, { color: colorScheme.text.primary }]}>{hourlyInfo.hour}h</Text>
+      <Text style={[styles.hourText, { color: colorScheme.text.primary }]}>
+        {hourlyInfo.hour_12}
+      </Text>
 
       <Image
         source={{ uri: `https:${hourlyInfo.icon}` }}
