@@ -27,7 +27,7 @@ const HourInfoCard: React.FC<HourInfoCardProps> = ({ hourlyInfo, activeUnit }) =
         source={{ uri: `https:${hourlyInfo.icon}` }}
         resizeMode={'contain'}
         style={{ height: 60, width: 60 }}
-      ></Image>
+      />
 
       <Text style={[styles.temperatureText, { color: colorScheme.text.primary }]}>
         {activeUnit === 'C' ? tempFormatted(hourlyInfo.temp_c) : tempFormatted(hourlyInfo.temp_f)}º

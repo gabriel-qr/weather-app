@@ -2,7 +2,7 @@ import { useTheme } from '@/contexts/ThemeContext';
 import { getFormattedDate, tempFormatted } from '@/lib/utils/utils';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
-import { StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, Image, StyleSheet, Text, View } from 'react-native';
 
 interface BasicInfoCardProps {
   locationWeatherData: any;
@@ -10,6 +10,7 @@ interface BasicInfoCardProps {
   forecastWeatherData: any;
   activeUnit: 'C' | 'F';
   locationId: LocationIdProps;
+  loading?: boolean;
 }
 
 interface LocationIdProps {
@@ -24,6 +25,7 @@ const BasicInfoCard: React.FC<BasicInfoCardProps> = ({
   forecastWeatherData,
   activeUnit,
   locationId,
+  loading,
 }) => {
   const { colorScheme } = useTheme();
   const Date = getFormattedDate(locationWeatherData.localtime, locationWeatherData.tz_id).date;
@@ -53,21 +55,35 @@ const BasicInfoCard: React.FC<BasicInfoCardProps> = ({
       : forecastWeatherData.forecastday[0].day.mintemp_f
   );
 
+  if (loading) {
+    return (
+      <View style={[styles.loadingState, { backgroundColor: colorScheme.card }]}>
+        <ActivityIndicator size={'large'} color={colorScheme.primary} />
+      </View>
+    );
+  }
+
   return (
     <View style={[styles.container, { backgroundColor: colorScheme.card }]}>
       <View style={styles.header}>
         <View style={[styles.locationContainer]}>
           <Ionicons name='location-outline' size={25} color={colorScheme.text.primary} />
           <Text style={[styles.locationText, { color: colorScheme.text.primary }]}>
-            {locationId.city}, {locationId.state} - {locationId.countryCode}
+            {locationId.city}, {locationId.state}
           </Text>
         </View>
+
         <Text
           style={[styles.secondaryText, { color: colorScheme.text.tertiary }]}
         >{`${dayOfTheWeek}, ${Date}`}</Text>
       </View>
 
-      <View>
+      <View style={{ alignItems: 'center' }}>
+        <Image
+          source={{ uri: `https:${currentWeatherData.condition.icon}` }}
+          resizeMode={'contain'}
+          style={styles.img}
+        />
         <Text style={[styles.temperatureText, { color: colorScheme.text.primary }]}>
           {`${currentTemp}º`}
         </Text>
@@ -157,10 +173,15 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
 
+  img: {
+    height: 80,
+    width: 80,
+    marginVertical: -10,
+  },
+
   temperatureText: {
     fontSize: 40,
     fontWeight: '700',
-    alignSelf: 'center',
   },
 
   temperatureSubText: {
@@ -199,6 +220,13 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     fontSize: 16,
     height: 250,
+  },
+
+  loadingState: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 30,
   },
 });
 

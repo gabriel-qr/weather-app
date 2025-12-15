@@ -1,13 +1,14 @@
 import { useTheme } from '@/contexts/ThemeContext';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { StyleSheet, TextInput, TextInputProps, View } from 'react-native';
+import { StyleSheet, TextInput, TextInputProps, TouchableOpacity, View } from 'react-native';
 
 interface SearchInputProps extends TextInputProps {
   value?: string;
   onChangeText?: (text: string) => void;
+  onSearch?: () => void;
 }
 
-const SearchInput: React.FC<SearchInputProps> = ({ value, onChangeText, ...props }) => {
+const SearchInput: React.FC<SearchInputProps> = ({ onSearch, value, onChangeText, ...props }) => {
   const { colorScheme, setWeatherType } = useTheme();
 
   return (
@@ -21,12 +22,16 @@ const SearchInput: React.FC<SearchInputProps> = ({ value, onChangeText, ...props
         {...props}
       />
 
-      <Ionicons
-        name='search-outline'
-        size={18}
-        color={colorScheme.text.secondary}
-        style={styles.icon}
-      />
+      <TouchableOpacity
+        style={[
+          styles.iconContainer,
+          { backgroundColor: colorScheme.cardDark, borderColor: colorScheme.text.tertiary },
+        ]}
+        activeOpacity={0.7}
+        onPress={onSearch}
+      >
+        <Ionicons name='search-outline' size={20} color={colorScheme.text.secondary} />
+      </TouchableOpacity>
     </View>
   );
 };
@@ -36,21 +41,23 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    borderRadius: 20,
-    paddingVertical: 5,
-    paddingHorizontal: 10,
+    // justifyContent: 'center',
+    borderRadius: 25,
+    gap: 8,
   },
 
   searchInput: {
     flex: 1,
     fontSize: 16,
-    paddingLeft: 40,
-    position: 'relative',
+    paddingLeft: 20,
   },
 
-  icon: {
-    position: 'absolute',
-    left: 20,
+  iconContainer: {
+    alignSelf: 'flex-end',
+    paddingVertical: 12,
+    paddingHorizontal: 12,
+    borderRadius: 25,
+    borderWidth: 0.5,
   },
 });
 

@@ -30,6 +30,7 @@ export default function Index() {
 
   const [activeUnit, setActiveUnit] = useState<'C' | 'F'>('C');
   const [searchText, setSearchText] = useState('');
+  const [searching, setSearching] = useState(false);
 
   const dateNow = locationWeatherData.localtime?.split(' ')[0];
   const hourNow = locationWeatherData.localtime?.split(' ')[1].slice(0, 2);
@@ -47,7 +48,7 @@ export default function Index() {
     .filter(
       (item: any) => (item.date === dateNow && item.hour_24 > hourNow) || item.date !== dateNow
     )
-    .slice(0, 24);
+    .slice(0, 12);
 
   const handleUnitChange = (unit: 'C' | 'F') => {
     setActiveUnit(unit);
@@ -56,10 +57,13 @@ export default function Index() {
   const handleSearch = async (value: string) => {
     if (value !== '') {
       try {
+        setSearching(true);
         await fetchSearchData(value);
         setSearchText('');
       } catch (error) {
         console.error('Erro na busca:', error);
+      } finally {
+        setSearching(false);
       }
     }
   };
@@ -88,6 +92,7 @@ export default function Index() {
               onChangeText={setSearchText}
               onSubmitEditing={() => handleSearch(searchText)}
               returnKeyType='search'
+              onSearch={() => handleSearch(searchText)}
             />
             <TemperatureToggle activeUnit={activeUnit} onChange={handleUnitChange} />
           </View>
@@ -97,19 +102,26 @@ export default function Index() {
             forecastWeatherData={forecastWeatherData}
             activeUnit={activeUnit}
             locationId={locationId}
+            loading={searching}
           />
 
-          <View style={[styles.flatListContainer, { backgroundColor: colorScheme.card }]}>
-            <Text style={[styles.text, { color: colorScheme.text.primary }]}>Hourly Forecast</Text>
-            <FlatList
-              contentContainerStyle={styles.flatlist}
-              data={filteredHourlyInfo}
-              keyExtractor={(item, index) => index.toString()}
-              horizontal={true}
-              showsHorizontalScrollIndicator={false}
-              renderItem={({ item }) => <HourInfoCard activeUnit={activeUnit} hourlyInfo={item} />}
-            />
-          </View>
+          {!searching && (
+            <View style={[styles.flatListContainer, { backgroundColor: colorScheme.card }]}>
+              <Text style={[styles.text, { color: colorScheme.text.primary }]}>
+                Hourly Forecast
+              </Text>
+              <FlatList
+                contentContainerStyle={styles.flatlist}
+                data={filteredHourlyInfo}
+                keyExtractor={(item, index) => index.toString()}
+                horizontal={true}
+                showsHorizontalScrollIndicator={false}
+                renderItem={({ item }) => (
+                  <HourInfoCard activeUnit={activeUnit} hourlyInfo={item} />
+                )}
+              />
+            </View>
+          )}
         </ScrollView>
       </SafeAreaView>
     </LinearGradient>
@@ -135,6 +147,7 @@ const styles = StyleSheet.create({
     flex: 1,
     gap: 25,
     padding: '5%',
+    paddingBottom: 25,
   },
 
   header: {
