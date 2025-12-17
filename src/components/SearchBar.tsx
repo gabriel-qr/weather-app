@@ -41,7 +41,6 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    // justifyContent: 'center',
     borderRadius: 25,
     gap: 8,
   },
@@ -57,7 +56,6 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     paddingHorizontal: 12,
     borderRadius: 25,
-    borderWidth: 0.5,
   },
 });
 

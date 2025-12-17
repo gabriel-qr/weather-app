@@ -67,7 +67,7 @@ export const weatherCodeToTheme: WeatherCodeMapping = {
   1264: { day: 'cloudy', night: 'cloudy' },
 };
 
-export const getThemeFromWeatherCode = (code: number, isDay: boolean = true): WeatherType => {
+export const getThemeFromWeatherCode = (code: number, isDay: boolean): WeatherType => {
   const mapping = weatherCodeToTheme[code];
 
   if (!mapping) {

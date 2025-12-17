@@ -30,7 +30,7 @@ export function useWeatherData() {
       const result = await getForecastWeather(`${location.subregion}`, 2, false);
 
       const weatherConditionCode = result.current.condition.code;
-      const isDay = result.current.condition.is_day;
+      const isDay = result.current.is_day;
 
       const hourlyWeatherDataTotal = [
         ...result.forecast.forecastday[0].hour,
@@ -38,7 +38,7 @@ export function useWeatherData() {
       ];
 
       const geoInfo = {
-        city: location.subregion,
+        city: location.city ? location.city : location.subregion,
         state: location.region,
         countryCode: location.isoCountryCode,
       };
@@ -64,10 +64,9 @@ export function useWeatherData() {
       try {
         console.log('searching for: ', value);
         const result = await getForecastWeather(value, 2, false);
-        console.log('Response: ', result.location);
 
         const weatherConditionCode = result.current.condition.code;
-        const isDay = result.current.condition.is_day;
+        const isDay = result.current.is_day;
 
         const hourlyWeatherDataTotal = [
           ...result.forecast.forecastday[0].hour,
@@ -75,10 +74,9 @@ export function useWeatherData() {
         ];
 
         const location = await getCityFromCoords(result.location.lat, result.location.lon);
-        console.log(location);
 
         const geoInfo = {
-          city: location?.subregion,
+          city: location?.city ? location.city : location?.subregion,
           state: location?.region,
           countryCode: location?.isoCountryCode,
         };

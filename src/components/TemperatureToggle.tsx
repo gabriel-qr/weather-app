@@ -17,7 +17,7 @@ const TemperatureToggle = ({ activeUnit, onChange }: TemperatureToggleProps) => 
         style={[
           styles.button,
           activeUnit === 'C'
-            ? { backgroundColor: colorScheme.accent }
+            ? { backgroundColor: colorScheme.cardDark }
             : { backgroundColor: colorScheme.transparent },
         ]}
         activeOpacity={0.8}
@@ -27,8 +27,8 @@ const TemperatureToggle = ({ activeUnit, onChange }: TemperatureToggleProps) => 
           style={[
             styles.text,
             activeUnit === 'C'
-              ? { color: colorScheme.white, fontWeight: '700' }
-              : { color: colorScheme.gray[600] },
+              ? { color: colorScheme.white, fontWeight: '900' }
+              : { color: colorScheme.white, fontWeight: '300' },
           ]}
         >
           ºC
@@ -39,7 +39,7 @@ const TemperatureToggle = ({ activeUnit, onChange }: TemperatureToggleProps) => 
         style={[
           styles.button,
           activeUnit === 'F'
-            ? { backgroundColor: colorScheme.accent }
+            ? { backgroundColor: colorScheme.cardDark }
             : { backgroundColor: colorScheme.transparent },
         ]}
         activeOpacity={0.8}
@@ -49,8 +49,8 @@ const TemperatureToggle = ({ activeUnit, onChange }: TemperatureToggleProps) => 
           style={[
             styles.text,
             activeUnit === 'F'
-              ? { color: colorScheme.white, fontWeight: '700' }
-              : { color: colorScheme.gray[600] },
+              ? { color: colorScheme.white, fontWeight: '900' }
+              : { color: colorScheme.white, fontWeight: '300' },
           ]}
         >
           ºF
