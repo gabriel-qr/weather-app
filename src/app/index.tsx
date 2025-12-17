@@ -1,11 +1,12 @@
 import BasicInfoCard from '@/components/BasicInfoCard';
+import ForecastChart from '@/components/ForecastChart';
 import HourInfoCard from '@/components/HourInfoCard';
-import SearchInput from '@/components/searchBar';
+import SearchInput from '@/components/SearchBar';
 import TemperatureToggle from '@/components/TemperatureToggle';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useLocationPermission } from '@/lib/hooks/useLocationPermission';
 import { useWeatherData } from '@/lib/hooks/useWeatherData';
-import { hour12Formatted, hour24Formatted } from '@/lib/utils/utils';
+import { hour12Formatted, hour24Formatted, tempFormatted } from '@/lib/utils/utils';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useState } from 'react';
 import { ActivityIndicator, FlatList, ScrollView, StyleSheet, Text, View } from 'react-native';
@@ -26,6 +27,7 @@ export default function Index() {
     loading,
     locationId,
     fetchSearchData,
+    refetch,
   } = useWeatherData();
 
   const [activeUnit, setActiveUnit] = useState<'C' | 'F'>('C');
@@ -39,8 +41,8 @@ export default function Index() {
     date: item.time.split(' ')[0],
     hour_24: hour24Formatted(item.time),
     hour_12: hour12Formatted(item.time),
-    temp_c: item.temp_c,
-    temp_f: item.temp_f,
+    temp_c: tempFormatted(item.temp_c),
+    temp_f: tempFormatted(item.temp_f),
     icon: item.condition.icon,
   }));
 
@@ -84,7 +86,7 @@ export default function Index() {
       style={styles.gradient}
     >
       <SafeAreaView style={styles.safeArea}>
-        <ScrollView contentContainerStyle={styles.container}>
+        <ScrollView style={{ flex: 1, padding: '5%' }} contentContainerStyle={styles.container}>
           <View style={styles.header}>
             <SearchInput
               placeholder='Search by city...'
@@ -96,6 +98,7 @@ export default function Index() {
             />
             <TemperatureToggle activeUnit={activeUnit} onChange={handleUnitChange} />
           </View>
+
           <BasicInfoCard
             locationWeatherData={locationWeatherData}
             currentWeatherData={currentWeatherData}
@@ -105,23 +108,25 @@ export default function Index() {
             loading={searching}
           />
 
-          {!searching && (
-            <View style={[styles.flatListContainer, { backgroundColor: colorScheme.card }]}>
-              <Text style={[styles.text, { color: colorScheme.text.primary }]}>
-                Hourly Forecast
-              </Text>
-              <FlatList
-                contentContainerStyle={styles.flatlist}
-                data={filteredHourlyInfo}
-                keyExtractor={(item, index) => index.toString()}
-                horizontal={true}
-                showsHorizontalScrollIndicator={false}
-                renderItem={({ item }) => (
-                  <HourInfoCard activeUnit={activeUnit} hourlyInfo={item} />
-                )}
-              />
-            </View>
-          )}
+          <ForecastChart
+            chartInfo={filteredHourlyInfo}
+            activeUnit={activeUnit}
+            loading={searching}
+          />
+
+          <View style={[styles.flatListContainer, { backgroundColor: colorScheme.card }]}>
+            <Text style={[styles.text, { color: colorScheme.text.primary }]}>Hourly Forecast</Text>
+            <FlatList
+              contentContainerStyle={styles.flatlist}
+              data={filteredHourlyInfo}
+              keyExtractor={(item, index) => index.toString()}
+              horizontal={true}
+              showsHorizontalScrollIndicator={false}
+              renderItem={({ item }) => (
+                <HourInfoCard activeUnit={activeUnit} hourlyInfo={item} loading={searching} />
+              )}
+            />
+          </View>
         </ScrollView>
       </SafeAreaView>
     </LinearGradient>
@@ -144,9 +149,7 @@ const styles = StyleSheet.create({
   },
 
   container: {
-    flex: 1,
     gap: 25,
-    padding: '5%',
     paddingBottom: 25,
   },
 

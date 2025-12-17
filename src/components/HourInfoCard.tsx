@@ -1,6 +1,6 @@
 import { useTheme } from '@/contexts/ThemeContext';
 import { tempFormatted } from '@/lib/utils/utils';
-import { Image, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, Image, StyleSheet, Text, View } from 'react-native';
 
 interface HourInfoCardProps {
   hourlyInfo: {
@@ -12,10 +12,19 @@ interface HourInfoCardProps {
     icon: string;
   };
   activeUnit: 'C' | 'F';
+  loading: boolean;
 }
 
-const HourInfoCard: React.FC<HourInfoCardProps> = ({ hourlyInfo, activeUnit }) => {
+const HourInfoCard: React.FC<HourInfoCardProps> = ({ hourlyInfo, activeUnit, loading }) => {
   const { colorScheme } = useTheme();
+
+  if (loading) {
+    return (
+      <View style={[styles.loadingState, { backgroundColor: colorScheme.card }]}>
+        <ActivityIndicator size={'large'} color={colorScheme.primary} />
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>
@@ -55,6 +64,13 @@ const styles = StyleSheet.create({
   temperatureText: {
     fontSize: 25,
     fontWeight: '700',
+  },
+
+  loadingState: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 30,
   },
 });
 
